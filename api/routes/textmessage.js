@@ -1,4 +1,6 @@
-const { phone } = require("phone");
+const PNF = require('google-libphonenumber').PhoneNumberFormat;
+const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+const config = require('../../config');
 const { CheckWp } = require("../middlewares/wacheck");
 
 module.exports = (app) => {
@@ -11,13 +13,22 @@ module.exports = (app) => {
             res.status(400).json({ error: "Missing parameters" });
             return;
         }
-        const phoneCheck = phone(data.phone);
-        if (!phoneCheck.isValid) {
+        const parsedNumber = phoneUtil.parse(data.phone, config.defaultPhoneCountry);
+        if (!phoneUtil.isValidNumber(parsedNumber)) {
             res.status(400).json({ error: "Invalid phone number" });
             return;
         }
-        const number = await res.client.getNumberId(phoneCheck.phoneNumber);
-        const result = await res.client.sendMessage(number._serialized, data.text);
-        res.status(200).json({ error: false, result });
+        try {
+            const number = await res.client.getNumberId(phoneUtil.format(parsedNumber, PNF.E164));
+            if (number == null) {
+                res.status(400).json({ error: "Phone number not in WhatsApp" });
+                return;
+            }
+            const result = await res.client.sendMessage(number._serialized, data.text);
+            res.status(200).json({ error: false, result });
+        } catch (err) {
+            console.error(err)
+            res.status(500).json({ error: err.toString() });
+        }
     })
 }
