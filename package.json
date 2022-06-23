@@ -1,0 +1,29 @@
+{
+  "name": "wp-rest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xacnio/wp-rest"
+  },
+  "author": "Xacnio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Xacnio/wp-rest/issues"
+  },
+  "homepage": "https://github.com/Xacnio/wp-rest#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "morgan": "^1.10.0",
+    "phone": "^3.1.22",
+    "qrcode-terminal": "^0.12.0",
+    "request-ip": "^2.2.0",
+    "whatsapp-web.js": "^1.17.0"
+  }
+}
